@@ -3,6 +3,7 @@ import 'dotenv/config'
 import movieRouter from './routes/movieRouter.js'
 import userRouter from './routes/userRouter.js'
 import postRouter from './routes/postRouter.js'
+import authRouter from './routes/authRouter.js'
 import mongoose from 'mongoose'
 import cors from 'cors'
 
@@ -13,7 +14,7 @@ const PORT = process.env.PORT
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({extended : false}))
-app.use(movieRouter, userRouter, postRouter)
+app.use(movieRouter, userRouter, postRouter, authRouter)
 
 const MONGO_URI = process.env.MONGO_URI
 
