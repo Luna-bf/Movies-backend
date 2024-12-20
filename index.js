@@ -1,49 +1,40 @@
-import express from 'express'
-import 'dotenv/config'
-import movieRouter from './routes/movieRouter.js'
-import userRouter from './routes/userRouter.js'
-import postRouter from './routes/postRouter.js'
-import authRouter from './routes/authRouter.js'
-import mongoose from 'mongoose'
-import cors from 'cors'
+import cors from "cors";
+import "dotenv/config";
+import express from "express";
+import mongoose from "mongoose";
+import authRouter from "./routes/authRouter.js";
+import movieRouter from "./routes/movieRouter.js";
+import postRouter from "./routes/postRouter.js";
+import userRouter from "./routes/userRouter.js";
 
-const app = express()
+// ------------------------------------------------------------------------------
+//*
+//* PENSES BIEN A METTRE .ENV DANS LE .GITIGNORE, car uniquement mettre .env.* dans le .gitignore masque uniquement les fichiers .env.quelquechose
+//*
+// ------------------------------------------------------------------------------
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT;
+const MONGO_URI = process.env.MONGO_URI;
+const app = express();
 
-app.use(cors())
-app.use(express.json())
-app.use(express.urlencoded({extended : false}))
-app.use(movieRouter, userRouter, postRouter, authRouter)
+const db = mongoose.connection;
 
-const MONGO_URI = process.env.MONGO_URI
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-const firstMiddleware =  (request, response, next) => {
-    console.log(`Welcome to my API`)
-    next()
-}
+app.get("/", (req, res) => {
+    res.send("Welcome to my API");
+});
 
-const secondMiddleware = (request, response, next) => {
-    response.send('Welcome to my API')
-}
+app.use(movieRouter, userRouter, postRouter, authRouter);
 
-app.get('/', firstMiddleware, secondMiddleware)
+mongoose.connect(MONGO_URI);
 
-app.post("/register", async(requestAnimationFrame, res) => {
-    const (name, last_name, email, password) = req.body;
+db.on("connected", () => {
+    console.log("Connected successfully");
+});
 
-    try {
-
-    } catch(err) {
-
-    }
-})
-
-mongoose.connect(MONGO_URI)
-const db = mongoose.connection
-db.on('connected', () => {
-    console.log('Connected successfully')
-})
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`))
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
