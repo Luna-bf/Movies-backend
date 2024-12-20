@@ -29,13 +29,19 @@ const secondMiddleware = (request, response, next) => {
 
 app.get('/', firstMiddleware, secondMiddleware)
 
-app.post("/register", async(requestAnimationFrame, res) => {
-    const (name, last_name, email, password) = req.body;
+app.post("/register", async(req, res) => {
+    const [name, last_name, email, password] = req.body;
 
     try {
-
+        await User.create({
+            name,
+            last_name,
+            email,
+            password
+        })
+        res.send({status: "success"})
     } catch(err) {
-
+        console.error(err)
     }
 })
 
