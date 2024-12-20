@@ -29,6 +29,16 @@ const secondMiddleware = (request, response, next) => {
 
 app.get('/', firstMiddleware, secondMiddleware)
 
+app.post("/register", async(requestAnimationFrame, res) => {
+    const (name, last_name, email, password) = req.body;
+
+    try {
+
+    } catch(err) {
+
+    }
+})
+
 mongoose.connect(MONGO_URI)
 const db = mongoose.connection
 db.on('connected', () => {
